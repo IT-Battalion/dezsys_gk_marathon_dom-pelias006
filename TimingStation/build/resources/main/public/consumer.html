@@ -1,0 +1,45 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Getting Started: Serving Web Content</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $.ajax({
+            url: "http://localhost:8080/timingstation/001/data"
+        }).then(function(data) {
+            console.log(data);
+            let partys = data.competitionData.party;
+            for (const partysKey of partys) {
+                $('#table_body').append('<tr><td>' + partysKey.partyID + '</td><td>' + partysKey.timing + '</td></tr>')
+            }
+            $('#base_table').DataTable({
+                searching: false,
+                lengthChange: false
+            });
+        });
+    });
+</script>
+
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.min.css"/>
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/ju/dt-1.11.3/cr-1.5.4/r-2.2.9/sc-2.0.5/datatables.min.css"/>
+
+<script type="text/javascript" src="https://cdn.datatables.net/v/ju/dt-1.11.3/cr-1.5.4/r-2.2.9/sc-2.0.5/datatables.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
+
+<body>
+
+<table id="base_table" class="display">
+    <thead>
+    <tr>
+        <th>Party ID</th>
+        <th>Party Time</th>
+    </tr>
+    </thead>
+    <tbody id="table_body">
+    </tbody>
+</table>
+</body>
+</html>
