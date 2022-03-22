@@ -87,3 +87,11 @@ services:
       SECTION_ID: 1
     depends_on:
       - activemq
+  centralstation-1:
+    image: centralstation:latest
+    container_name: centralstation-1
+    ports:
+      - "8079:8080"
+    depends_on:
+      - activemq
+      - database
