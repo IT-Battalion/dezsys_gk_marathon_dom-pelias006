@@ -51,7 +51,7 @@ services:
       - "8082:8080"
     environment:
       STATION_ID: 2
-      SECTION_ID: 1
+      SECTION_ID: 2
     depends_on:
       - controllingstation-1
       - activemq
@@ -62,7 +62,7 @@ services:
       - "8083:8080"
     environment:
       STATION_ID: 3
-      SECTION_ID: 1
+      SECTION_ID: 2
     depends_on:
       - controllingstation-1
       - activemq
@@ -85,6 +85,16 @@ services:
     environment:
       STATION_ID: 1
       SECTION_ID: 1
+    depends_on:
+      - activemq
+  controllingstation-2:
+    image: controllingstation:latest
+    container_name: controllingstation-2
+    ports:
+      - "8078:8080"
+    environment:
+      STATION_ID: 1
+      SECTION_ID: 2
     depends_on:
       - activemq
   centralstation-1:

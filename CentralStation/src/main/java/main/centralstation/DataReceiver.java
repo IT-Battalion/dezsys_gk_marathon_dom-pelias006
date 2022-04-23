@@ -10,18 +10,20 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Component
 @Slf4j
 public class DataReceiver {
-    @Value("{$mongodb.sector-urls}")
-    private String[] urls;
+    @Value("{sector-urls}")
+    private List<String> urls;
 
     @Autowired
     private CentralStationService service;
     
     @Scheduled(fixedRate = 3000L)
     public void receive() {
+        log.debug("URLS: " + urls.toString());
         for (String url :
                 this.urls) {
             RestTemplate template = new RestTemplate();
