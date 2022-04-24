@@ -46,33 +46,11 @@ services:
       - activemq
   timingstation-2:
     image: timingstation:latest
-    container_name: timingstation-2
-    ports:
-      - "8082:8080"
-    environment:
-      STATION_ID: 2
-      SECTION_ID: 2
-    depends_on:
-      - controllingstation-1
-      - activemq
-  timingstation-3:
-    image: timingstation:latest
-    container_name: timingstation-3
-    ports:
-      - "8083:8080"
-    environment:
-      STATION_ID: 3
-      SECTION_ID: 2
-    depends_on:
-      - controllingstation-1
-      - activemq
-  timingstation-4:
-    image: timingstation:latest
     container_name: timingstation-4
     ports:
       - "8084:8080"
     environment:
-      STATION_ID: 4
+      STATION_ID: 2
       SECTION_ID: 1
     depends_on:
       - controllingstation-1
@@ -85,16 +63,6 @@ services:
     environment:
       STATION_ID: 1
       SECTION_ID: 1
-    depends_on:
-      - activemq
-  controllingstation-2:
-    image: controllingstation:latest
-    container_name: controllingstation-2
-    ports:
-      - "8078:8080"
-    environment:
-      STATION_ID: 1
-      SECTION_ID: 2
     depends_on:
       - activemq
   centralstation-1:
