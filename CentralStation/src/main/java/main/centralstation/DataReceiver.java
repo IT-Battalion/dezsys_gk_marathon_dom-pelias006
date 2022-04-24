@@ -15,19 +15,21 @@ import java.util.List;
 @Component
 @Slf4j
 public class DataReceiver {
-    @Value("{sector-urls}")
-    private List<String> urls;
+    @Value("${sector-urls}")
+    private String[] urls;
 
     @Autowired
     private CentralStationService service;
     
     @Scheduled(fixedRate = 3000L)
     public void receive() {
-        log.debug("URLS: " + urls.toString());
+        log.debug("URLS: " + Arrays.toString(urls));
         for (String url :
                 this.urls) {
             RestTemplate template = new RestTemplate();
-            TimingstationData[] data = template.getForObject(url, TimingstationData[].class);
+            log.info(url);
+            //Object[] data = template.getForObject(url, Object[].class);
+            TimingstationData[] data = template.getForEntity(url, TimingstationData[].class).getBody();
             log.info("Received (" + url + ") data: " + Arrays.toString(data));
             service.saveToDatabase(data);
         }
