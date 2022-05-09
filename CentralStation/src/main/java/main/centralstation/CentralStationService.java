@@ -10,12 +10,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Service("service")
 public class CentralStationService implements DataService {
@@ -40,6 +38,7 @@ public class CentralStationService implements DataService {
     @Override
     public TimingstationData addData(TimingstationData newdata) {
         TimingstationData data = new TimingstationData();
+        data.setId(newdata.getId());
         data.setAltitude(newdata.getAltitude());
         data.setCompetitionData(newdata.getCompetitionData());
         data.setWeatherData(newdata.getWeatherData());
@@ -52,105 +51,56 @@ public class CentralStationService implements DataService {
     }
 
     @Override
-    public TimingstationData updateData(TimingstationData data) {
-        /*
-        Optional<Student> studentOpt = studentRepository.findById(studentExistingDto.getId());
-        if (!studentOpt.isPresent()) {
-            throw new ResourceNotFoundException("student not found");
+    public TimingstationData updateData(TimingstationData oldData) {
+
+        TimingstationData dataOpt = mongoTemplate.findById(oldData.getId(), TimingstationData.class);
+        if (dataOpt == null) {
+            throw new ResourceNotFoundException("data not found");
         }
-        Student student = studentOpt.get();
-        student.setFirstName(studentExistingDto.getFirstName());
-        student.setLastName(studentExistingDto.getLastName());
-        student.setEmail(studentExistingDto.getEmail());
-        student.setContactNumber(studentExistingDto.getContactNumber());
-        student.setCourseName(studentExistingDto.getCourseName());
-
-        student = studentRepository.save(student);
-
-        StudentDto studentDto = new StudentDto();
-        studentDto.setId(student.getId());
-        studentDto.setFirstName(student.getFirstName());
-        studentDto.setLastName(student.getLastName());
-        studentDto.setEmail(student.getEmail());
-        studentDto.setContactNumber(student.getContactNumber());
-        studentDto.setCourseName(student.getCourseName());
-        studentDto.setCreated(student.getCreated());
-        studentDto.setModified(student.getModified());
-        return studentDto;
-         */
-        return null;
+        dataOpt.setId(oldData.getId());
+        dataOpt.setAltitude(oldData.getAltitude());
+        dataOpt.setCompetitionData(oldData.getCompetitionData());
+        dataOpt.setWeatherData(oldData.getWeatherData());
+        dataOpt.setDistance(oldData.getDistance());
+        dataOpt.setUnitDistance(oldData.getUnitDistance());
+        dataOpt.setUnitAltitude(oldData.getUnitAltitude());
+        dataOpt.setTimingstationID(oldData.getTimingstationID());
+        dataOpt.setTimestamp(oldData.getTimestamp());
+        return mongoTemplate.save(dataOpt);
     }
 
     @Override
     public void deleteData(String dataID) {
-/*
-if (studentId == null) {
-            throw new IllegalArgumentException("studentId must not be null");
+
+        if (dataID == null) {
+            throw new IllegalArgumentException("dataId must not be null");
         }
-        Optional<Student> studentOpt = studentRepository.findById(studentId);
-        if (!studentOpt.isPresent()) {
-            throw new ResourceNotFoundException("student not found");
+        TimingstationData dataOpt = mongoTemplate.findById(dataID, TimingstationData.class);
+        if (dataOpt == null) {
+            throw new ResourceNotFoundException("data not found");
         }
-        studentRepository.deleteById(studentId);
- */
+        mongoTemplate.remove(dataOpt);
+
     }
 
     @Override
     public TimingstationData getDataById(String dataID) {
-        /*
-        if (studentId == null) {
-            throw new IllegalArgumentException("studentId must not be null");
+        if (dataID == null) {
+            throw new IllegalArgumentException("dataID must not be null");
         }
 
-        Optional<Student> studentOpt = studentRepository.findById(studentId);
-        if (!studentOpt.isPresent()) {
-            throw new ResourceNotFoundException("student not found");
+        TimingstationData dataOpt = mongoTemplate.findById(dataID, TimingstationData.class);
+        if (dataOpt == null) {
+            throw new ResourceNotFoundException("data not found");
         }
-        Student student = studentOpt.get();
-
-        StudentDto studentDto = new StudentDto();
-        studentDto.setId(student.getId());
-        studentDto.setFirstName(student.getFirstName());
-        studentDto.setLastName(student.getLastName());
-        studentDto.setEmail(student.getEmail());
-        studentDto.setContactNumber(student.getContactNumber());
-        studentDto.setCourseName(student.getCourseName());
-        studentDto.setCreated(student.getCreated());
-        studentDto.setModified(student.getModified());
-        return studentDto;
-         */
-        return null;
+        return dataOpt;
     }
 
     @Override
-    public Page<TimingstationData> getAllDates(Pageable dataPage) {
-        /*
-        Page<Student> studentsPage = studentRepository.findAll(pageable);
+    public Collection<TimingstationData> getAllDates() {
 
-        List<StudentDto> studentsDto = new ArrayList<>();
-        Page<StudentDto> studentsDtoPage = new PageImpl<>(studentsDto, pageable, 0);
+        return mongoTemplate.findAll(TimingstationData.class);
 
-        if (studentsPage != null && !studentsPage.isEmpty()) {
-
-            studentsPage.getContent().forEach(student -> {
-                StudentDto studentDto = new StudentDto();
-                studentDto.setId(student.getId());
-                studentDto.setFirstName(student.getFirstName());
-                studentDto.setLastName(student.getLastName());
-                studentDto.setEmail(student.getEmail());
-                studentDto.setContactNumber(student.getContactNumber());
-                studentDto.setCourseName(student.getCourseName());
-                studentDto.setCreated(student.getCreated());
-                studentDto.setModified(student.getModified());
-
-                studentsDto.add(studentDto);
-            });
-            studentsDtoPage =
-                    new PageImpl<>(studentsDto, pageable, studentsPage.getTotalElements());
-        }
-        return studentsDtoPage;
-         */
-        return null;
     }
 
 }
