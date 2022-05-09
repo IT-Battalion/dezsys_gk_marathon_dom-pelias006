@@ -27,7 +27,10 @@ public class DataReceiver {
             RestTemplate template = new RestTemplate();
             HashMap<String, TimingstationData> data = (HashMap<String, TimingstationData>) template.getForEntity(url, Object.class).getBody();
             log.info("Received (" + url + ") data: " + data);
-            if (data != null) service.saveToDatabase(data.values().toArray(new TimingstationData[0]));
+
+            if (data != null){
+                service.saveToDatabase(data.values());
+            }
         }
     }
 }

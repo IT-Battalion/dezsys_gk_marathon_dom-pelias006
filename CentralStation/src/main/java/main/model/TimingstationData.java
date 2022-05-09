@@ -1,12 +1,14 @@
 package main.model;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
-
+@Document(collection = "tdata")
 public class TimingstationData {
-
+    @Id  private String id;
     private String timingstationID;
     private String timestamp;
 
