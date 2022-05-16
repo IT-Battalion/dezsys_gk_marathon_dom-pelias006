@@ -40,8 +40,8 @@ public class CentralStationService implements DataService {
         }
     }
 
-    public MongoCollection<Document> getData() {
-        return mongoTemplate.getCollection("data");
+    public Collection<TimingstationData> getData() {
+        return getAllDates();
     }
 
     @Override
