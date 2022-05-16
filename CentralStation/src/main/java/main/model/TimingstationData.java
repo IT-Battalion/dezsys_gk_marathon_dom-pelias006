@@ -8,7 +8,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 @Document(collection = "tdata")
 public class TimingstationData {
-    @Id  private String id;
+    @Id private String id;
     private String timingstationID;
     private String timestamp;
 
@@ -28,7 +28,6 @@ public class TimingstationData {
         this.timestamp = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS").format(new Date());
         this.unitDistance = "m";
         this.unitAltitude = "hm";
-
     }
 
     public TimingstationData(String timingstationID, String timestamp, double distance, String unitDistance, double altitude, String unitAltitude, WeatherData weatherData, CompetitionData competitionData) {

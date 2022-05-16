@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -27,7 +29,14 @@ public class CentralStationService implements DataService {
         });
         for (TimingstationData d :
                 pojos) {
-            if (d != null) /*mongoTemplate.save(d);*/ addData(d);
+            if (d != null) {
+                if (getDataByTimingStationID(d.getTimingstationID()) != null) {
+                    updateData(d);
+                } else {
+                    /*mongoTemplate.save(d);*/
+                    addData(d);
+                }
+            }
         }
     }
 
@@ -53,11 +62,11 @@ public class CentralStationService implements DataService {
     @Override
     public TimingstationData updateData(TimingstationData oldData) {
 
-        TimingstationData dataOpt = mongoTemplate.findById(oldData.getId(), TimingstationData.class);
+        TimingstationData dataOpt = getDataByTimingStationID(oldData.getTimingstationID());
         if (dataOpt == null) {
             throw new ResourceNotFoundException("data not found");
         }
-        dataOpt.setId(oldData.getId());
+        //dataOpt.setId(oldData.getId());
         dataOpt.setAltitude(oldData.getAltitude());
         dataOpt.setCompetitionData(oldData.getCompetitionData());
         dataOpt.setWeatherData(oldData.getWeatherData());
@@ -88,12 +97,15 @@ public class CentralStationService implements DataService {
         if (dataID == null) {
             throw new IllegalArgumentException("dataID must not be null");
         }
+        return mongoTemplate.findById(dataID, TimingstationData.class);
+    }
 
-        TimingstationData dataOpt = mongoTemplate.findById(dataID, TimingstationData.class);
-        if (dataOpt == null) {
-            throw new ResourceNotFoundException("data not found");
+    public TimingstationData getDataByTimingStationID(String timingstationID) {
+        if (timingstationID == null) {
+            throw new IllegalArgumentException("timingstationID must not be null");
         }
-        return dataOpt;
+        List<TimingstationData> all = mongoTemplate.find(new Query(Criteria.where("timingstationID").is(timingstationID)), TimingstationData.class);
+        return all.size() == 0 ? null : all.get(0);
     }
 
     @Override
