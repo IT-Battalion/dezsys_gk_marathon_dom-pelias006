@@ -14,6 +14,12 @@ https://github.com/spring-projects/spring-data-book/tree/master/mongodb/src/main
 
 Danach, hatte ich aber immernoch das Problem, dass immer wenn die Daten abgerufen wurden, ein neuer Datenbank eintrag erstellt wurde, und nicht einfach der Alte bearbeitet wurde.
 
+## Formulierung 3 sinnvollen Fragestellung für einen Anwendungsfall in der Zentrale und deren Abfragen in einer Mongo Shell
+
+1. Durchschnittliche Zeit der einzelnen Parties auf alle Timingstations.
+2. Durschnittliche Zeit die ein läufer von Timingstation a zu Timingstation b benötigt.
+3. Rekord Zeit zwischen zwei Timingstations.
+
 ## Fragestellungen
 
 + Nennen Sie 4 Vorteile eines NoSQL Repository im Gegensatz zu einem relationalen DBMS
@@ -32,6 +38,8 @@ Danach, hatte ich aber immernoch das Problem, dass immer wenn die Daten abgerufe
   | APIs                                                         | Abfragen zur Speicherung und zum Abrufen von Daten werden mit SQL (Structured Query Language) übermittelt. | Daten werden über objektbasierte APIs gespeichert und abgefragt. |
 
 + Welche Schwierigkeiten ergeben sich bei der Zusammenführung der Daten?
+
+  > Daten könnten dupliziert werden, oder mindestens genauso schlimm verloren gehen. Daher muss man sich eine sinnvolle Möglichkeit übelregen, um die Daten zusammenzuführen. Problem dabei könnte jedoch sein, dass dieses zusammenfügen, gleichzeitig aber bei allen Timingstations die daten der timingstation zu behalten, sehr resourcen intensiv sein.
 
 + Welche Arten von NoSQL Datenbanken gibt es?
 
@@ -79,7 +87,11 @@ Danach, hatte ich aber immernoch das Problem, dass immer wenn die Daten abgerufe
 
 + Mit welchem Befehl koennen Sie die Teilzeiten eines Marathonlaeufers sortiert nach der Timingstations anzeigen.
 
+  `db.data.find().sort({"timingstationID": 1})`
+
 + Mit welchem Befehl koennen Sie die Teilzeiten eines Marathonlaeufers auf einer bestimmte Timing Stations (Bsp. 1) aendern?
+
+  `db.data.update({"timingstationID: 1"}, {$set: {"competitionData": "DATA"}})`
 
 ## Quellen
 

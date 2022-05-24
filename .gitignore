@@ -1,1 +1,6 @@
 /ControllingStation/build/
+/TimingStation/build/
+/CentralStation/build/
+/ControllingStation/build/*
+/TimingStation/build/*
+/CentralStation/build/*
